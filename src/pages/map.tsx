@@ -1,7 +1,9 @@
+import { KakaoMap } from "../components/imports/Map";
+
 const Map = () => {
   return (
     <div>
-      맵-페이지ㅡ!
+      <KakaoMap />
     </div>
   )
 }
