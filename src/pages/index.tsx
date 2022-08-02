@@ -1,5 +1,6 @@
 import { memo } from "react";
-import Map from "./map";
+import NotFound from "./404";
+import Map from "./maps";
 
 const Index = () => {
   return (
@@ -11,5 +12,6 @@ const Index = () => {
 
 export default {
   Index: memo(Index),
-  Map: memo(Map),
+  NotFound: memo(NotFound),
+  Maps: Map,
 };
