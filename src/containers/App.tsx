@@ -11,8 +11,10 @@ function App() {
       <Routes>
         <Route path='/' element={
           <Pages.Index />} />
-        <Route path='/map' element={
-          <Pages.Map />} />
+        <Route path='maps'>
+          <Route path='kakao' element={<Pages.Maps.Kakao />} />
+        </Route>
+        <Route path='*' element={<Pages.NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

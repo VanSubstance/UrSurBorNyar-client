@@ -9,7 +9,10 @@ export const Header = () => {
       <Buttons.Main text="메인" handleClick={() => navigate('/', {
         replace: false,
       })} />
-      <Buttons.Main text="지도" handleClick={() => navigate('/map', {
+      <Buttons.Main text="카카오 지도" handleClick={() => navigate('/maps/kakao', {
+        replace: false,
+      })} />
+      <Buttons.Main text="네이버 지도" handleClick={() => navigate('/maps/naver', {
         replace: false,
       })} />
     </div>
