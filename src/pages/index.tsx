@@ -13,7 +13,5 @@ const Index = () => {
 export default {
   Index: memo(Index),
   NotFound: memo(NotFound),
-  Maps: {
-    Kakao: memo(Map.Kakao),
-  },
+  Maps: Map,
 };

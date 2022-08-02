@@ -1,4 +1,6 @@
+import { memo } from "react";
 import { KakaoMap } from "../../components/imports/Map";
+import NaverMapPage from "./naver";
 
 const Map = () => {
   return (
@@ -9,5 +11,6 @@ const Map = () => {
 }
 
 export default {
-  Kakao: Map,
+  Kakao: memo(Map),
+  Naver: memo(NaverMapPage),
 };

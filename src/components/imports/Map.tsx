@@ -44,6 +44,47 @@ export const KakaoMap = memo(() => {
   );
 });
 
+export const NaverMap = memo(() => {
+  const [mapInstance, setMapInstance] = useState(null);
+  const [centerCoor, setCenterCoor] = useState<coorsProps>({
+    lat: 37.5666805,
+    lng: 126.9784147
+  });
+
+  const getNaverCoors = useCallback(({ lat, lng }: coorsProps) => {
+    return new window.naver.maps.LatLng(lat, lng);
+  }, [window.naver]);
+
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
+        setCenterCoor({
+          lat: latitude,
+          lng: longitude,
+        });
+      });
+    }
+  }, [navigator]);
+
+  useEffect(() => {
+    const map = new window.naver.maps.Map('map', {
+      center: getNaverCoors(centerCoor),
+      level: 3,
+    });
+    setMapInstance(map);
+  }, []);
+
+  useEffect(() => {
+    if (mapInstance) {
+      mapInstance.setCenter(getNaverCoors(centerCoor));
+    }
+  }, [centerCoor]);
+
+  return (
+    <MapWrapper id={`map`}></MapWrapper>
+  );
+});
+
 interface coorsProps {
   lat: number;
   lng: number;

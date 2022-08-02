@@ -13,6 +13,7 @@ function App() {
           <Pages.Index />} />
         <Route path='maps'>
           <Route path='kakao' element={<Pages.Maps.Kakao />} />
+          <Route path='naver' element={<Pages.Maps.Naver />} />
         </Route>
         <Route path='*' element={<Pages.NotFound />} />
       </Routes>
