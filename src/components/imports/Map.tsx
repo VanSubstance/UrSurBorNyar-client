@@ -85,7 +85,7 @@ export const NaverMap = memo(() => {
   );
 });
 
-interface coorsProps {
+export interface coorsProps {
   lat: number;
   lng: number;
 }
