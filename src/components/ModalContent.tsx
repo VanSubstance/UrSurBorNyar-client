@@ -57,6 +57,9 @@ const Modal = () => {
                   복사
                 </ModalLinkbutton>
               </ModalLinkWrapper>
+              <ModalCloseButtonWrapper onClick={closeModal}>
+                <ModalCloseButton />
+              </ModalCloseButtonWrapper>
             </ModalInner>
           </ModalWrapper>
         </div>
