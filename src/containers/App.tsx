@@ -1,11 +1,13 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Footer } from '../commons/Footer';
-import { Header } from '../commons/Header';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { RecoilRoot } from "recoil";
+import { Footer } from "../commons/Footer";
+import { Header } from "../commons/Header";
 import Pages from "../pages";
 
 function App() {
   return (
+      <RecoilRoot>
     <BrowserRouter>
       {/* <Header /> */}
       <Routes>
@@ -19,6 +21,7 @@ function App() {
       </Routes>
       {/* <Footer /> */}
     </BrowserRouter>
+      </RecoilRoot>
   );
 }
 
