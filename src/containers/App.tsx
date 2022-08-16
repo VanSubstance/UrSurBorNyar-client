@@ -7,17 +7,17 @@ import Pages from "../pages";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path='/' element={
-          <Pages.Index />} />
+          <Pages.Maps.Kakao />} />
         <Route path='maps'>
           <Route path='kakao' element={<Pages.Maps.Kakao />} />
           <Route path='naver' element={<Pages.Maps.Naver />} />
         </Route>
         <Route path='*' element={<Pages.NotFound />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }

@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 
-export const KakaoMap = memo(() => {
+export const KakaoMap = memo(({ width = `500px`, height = `400px` }: { width?: string; height?: string; }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [centerCoor, setCenterCoor] = useState<coorsProps>({
     lat: 37.5666805,
@@ -40,11 +40,11 @@ export const KakaoMap = memo(() => {
   }, [centerCoor]);
 
   return (
-    <MapWrapper id={`map`}></MapWrapper>
+    <MapWrapper id={`map`} width={width} height={height}></MapWrapper>
   );
 });
 
-export const NaverMap = memo(() => {
+export const NaverMap = memo(({ width = `500px`, height = `400px` }: { width?: string; height?: string; }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [centerCoor, setCenterCoor] = useState<coorsProps>({
     lat: 37.5666805,
@@ -81,7 +81,7 @@ export const NaverMap = memo(() => {
   }, [centerCoor]);
 
   return (
-    <MapWrapper id={`map`}></MapWrapper>
+    <MapWrapper id={`map`} width={width} height={height}></MapWrapper>
   );
 });
 
@@ -91,13 +91,13 @@ export interface coorsProps {
 }
 
 const MapWrapper = styled.div<{
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
 }>`
 ${({ width, height }) => {
     return `
-      width: ${width ?? 500}px;
-      height: ${height ?? 400}px;
+      width: ${width};
+      height: ${height};
   `;
   }};
 `;

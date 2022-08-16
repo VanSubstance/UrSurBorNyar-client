@@ -26,7 +26,6 @@ const NaverMapPage = () => {
       }
     });
     console.log(resData);
-    
   }, []);
 
   return (
