@@ -1,10 +1,9 @@
 import { memo } from "react";
 import NotFound from "./404";
-import Map from "./maps";
 import { useRecoilState } from "recoil";
 import ModalVisibility from "../recoils/modalvisibility";
 import { useEffect } from "react";
-import ModalContent from "../components/ModalContent";
+import { KakaoMap } from "../components/imports/Map";
 
 const Index = () => {
   const [modalState, setModalState] = useRecoilState(ModalVisibility);
@@ -17,14 +16,13 @@ const Index = () => {
 
   useEffect(() => {
     openModal();
-    console.log(modalState.type);
   }, []);
 
-  return <div>메인-페이지ㅡ!<ModalContent/></div>;
+  return <div>
+    <KakaoMap width="100vw" height="100vh" /></div>;
 };
 
 export default {
   Index: memo(Index),
   NotFound: memo(NotFound),
-  Maps: Map,
 };

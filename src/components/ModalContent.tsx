@@ -46,8 +46,8 @@ const Modal = () => {
       return (
         <div>
           <ModalOverlay />
-          <ModalWrapper>
-            <ModalInner className="modal-inner">
+          <ModalWrapper onClick={closeModal}>
+            <ModalInner className="modal-inner" onClick={(e) => e.stopPropagation()}>
               <ModalP>{modalState.children ?? <p>children없음</p>}</ModalP>
               <ModalLinkWrapper>
                 <ModalLinkP>{promiseLink}</ModalLinkP>{" "}
@@ -68,8 +68,8 @@ const Modal = () => {
       return (
         <div>
           <ModalOverlay />
-          <ModalWrapper>
-            <ModalInner className="modal-inner">
+          <ModalWrapper onClick={closeModal}>
+            <ModalInner className="modal-inner" onClick={(e) => e.stopPropagation()}>
               <ModalP>{modalState.children ?? <p>children없음</p>}</ModalP>
               <ModalPasswordInput
                 name="modalPeopleNumber"
@@ -100,7 +100,7 @@ export default Modal;
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
-  display: "block";
+  display: block;
   position: fixed;
   top: 0;
   right: 0;
@@ -114,7 +114,7 @@ const ModalWrapper = styled.div`
 
 const ModalOverlay = styled.div`
   box-sizing: border-box;
-  display: "block";
+  display: block;
   position: fixed;
   top: 0;
   left: 0;
@@ -250,7 +250,7 @@ const ModalLinkbutton = styled.div`
   width: 60px;
   font-size: 14px;
   padding : 18px 0px;
-  background: #f6f8ff
+  background: #f6f8ff;
   border: none;
   text-align: center;
 
