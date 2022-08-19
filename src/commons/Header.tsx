@@ -1,20 +1,16 @@
-import { useNavigate } from "react-router-dom"
-import Buttons from "../components/buttons"
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import CoordinateList from "../recoils/coordinateList";
 
 export const Header = () => {
-  const navigate = useNavigate();
+  const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
+
+  useEffect(() => {
+    console.log('현재 선택된 좌표:: ', coordinateList);
+
+  }, [coordinateList]);
 
   return (
-    <div>
-      <Buttons.Main text="메인" handleClick={() => navigate('/', {
-        replace: false,
-      })} />
-      <Buttons.Main text="카카오 지도" handleClick={() => navigate('/maps/kakao', {
-        replace: false,
-      })} />
-      <Buttons.Main text="네이버 지도" handleClick={() => navigate('/maps/naver', {
-        replace: false,
-      })} />
-    </div>
+    null
   )
 }

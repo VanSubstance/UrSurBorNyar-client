@@ -15,7 +15,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    openModal();
+    // openModal();
   }, []);
 
   return <div>
