@@ -10,7 +10,7 @@ function App() {
   return (
     <RecoilRoot>
       <BrowserRouter>
-        {/* <Header /> */}
+        <Header />
         <ModalContent />
         <Routes>
           <Route path='/' element={
