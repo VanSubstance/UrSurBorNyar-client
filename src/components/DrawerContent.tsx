@@ -1,38 +1,45 @@
-import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import CoordinateList from "../recoils/coordinateList";
+import { PlaceType } from "../types/map";
 
 const DrawerContent = (props) => {
+  const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
+
   return (
     <DrawerContentWrapper>
-      <StartWrapper>
-        <StartTitle>출발지</StartTitle>
-        <StartContent>37.478100,126.957507</StartContent>
-        <StartAddress>서울특별시 관악구 관악로14길 99</StartAddress>
-        <StaerButtonWrapper>
-          <DrawerButton>수정</DrawerButton>
-          <DrawerButton>지도에서 찾기</DrawerButton>
-          <DrawerButton>주소로 찾기</DrawerButton>
-        </StaerButtonWrapper>
-      </StartWrapper>
-      <StartWrapper>
-        <StartTitle>도착지</StartTitle>
-        <StartContent>37.478100,126.957507</StartContent>
-        <StartAddress>서울특별시 관악구 관악로14길 99</StartAddress>
-        <StaerButtonWrapper>
-          <DrawerButton>수정</DrawerButton>
-          <DrawerButton>지도에서 찾기</DrawerButton>
-          <DrawerButton>주소로 찾기</DrawerButton>
-        </StaerButtonWrapper>
-      </StartWrapper>
-    </DrawerContentWrapper>
-  );
+      <div>
+        {coordinateList.map((data, index) => {
+          return (
+            <PlaceContent key={index} data={data} index={+index + 1} />
+          )
+        })}
+      </div>
+    </DrawerContentWrapper>)
 };
+
+const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
+  const { name, coor: { x, y }, id = null } = data;
+  return (
+    <StartWrapper>
+      <StartTitle>{`${index}번째 장소`}</StartTitle>
+      <StartContent>{`${x}, ${y}`}</StartContent>
+      <StartAddress>{name}</StartAddress>
+      <StaerButtonWrapper>
+        <DrawerButton>수정</DrawerButton>
+        <DrawerButton>지도에서 찾기</DrawerButton>
+        <DrawerButton>주소로 찾기</DrawerButton>
+      </StaerButtonWrapper>
+    </StartWrapper>
+  );
+}
 
 export default DrawerContent;
 
 const DrawerContentWrapper = styled.div`
-  margin: 20px 0px 0px 20px;
+  margin: 20px;
+  max-height: calc(100% - 40px);
+  overflow-y: scroll;
 `;
 
 const StartWrapper = styled.div``;

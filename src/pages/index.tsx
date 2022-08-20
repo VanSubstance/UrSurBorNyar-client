@@ -4,7 +4,6 @@ import { useRecoilState } from "recoil";
 import ModalVisibility from "../recoils/modalvisibility";
 import { useEffect } from "react";
 import { KakaoMap } from "../components/imports/Map";
-import BottomDrawer from "../components/BottomDrawer";
 
 const Index = () => {
   const [modalState, setModalState] = useRecoilState(ModalVisibility);
@@ -22,7 +21,6 @@ const Index = () => {
   return (
     <div>
       <KakaoMap width="100vw" height="100vh" />
-      <BottomDrawer />
     </div>
   );
 };

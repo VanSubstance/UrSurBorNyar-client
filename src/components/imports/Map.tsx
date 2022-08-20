@@ -69,7 +69,8 @@ export const KakaoMap = memo(({ width = `500px`, height = `400px` }: sizeProps) 
       geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
         setCoordinateList(
           [...coordinateList, { name: res[0].road_address ? res[0].road_address.address_name : '일반', coor: newCoor, id: null }].filter((c, index) => {
-            return coordinateList.length < 2 || index !== 0;
+            // return coordinateList.length < 2 || index !== 0;
+            return true;
           })
         );
       });
