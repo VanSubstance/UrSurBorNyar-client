@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import DrawerContent from "./DrawerContent";
 
-const BottomDrawer = () => {
+const BottomDrawer = (props) => {
   return (
     <DrawerWrapper>
       <Checkbox type="checkbox" id="navInput" />
@@ -11,7 +12,9 @@ const BottomDrawer = () => {
         <OpenBtnMid />
         <OpenBtnBot />
       </OpenBtn>
-      <DrawerContentWrapper></DrawerContentWrapper>
+      <DrawerContentWrapper>
+        <DrawerContent/>
+      </DrawerContentWrapper>
     </DrawerWrapper>
   );
 };
