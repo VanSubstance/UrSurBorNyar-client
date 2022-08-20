@@ -30,7 +30,7 @@ const DrawerContentWrapper = styled.div`
   margin: 0 auto;
   z-index: 998;
   width: 90%;
-  height: 1000px;
+  height: 100%;
   background: #ffffff;
   border: 1px solid #9381dd;
   border-radius: 30px;
@@ -42,13 +42,13 @@ const DrawerContentWrapper = styled.div`
 const OpenBtn = styled.label`
   position: fixed;
   width: 40px;
-  height: 40px;
-  bottom: 20px;
+  height: 100%;
   right: 7%;
   position: fixed;
   cursor: pointer;
   transition: 0.5s cubic-bezier(0.6, 0.05, 0.28, 0.91);
-  z-index: 999;
+  transform: translateY(-5%);
+  z-index: 997;
 `;
 
 const OpenBtnTop = styled.div`
@@ -84,9 +84,9 @@ const Checkbox = styled.input`
   cursor: pointer;
 
   &:checked ~ ${DrawerContentWrapper} {
-    transform: translateX(-50%) translateY(-850px);
+    transform: translateX(-50%) translateY(-90%);
   }
   &:checked ~ ${OpenBtn} {
-    transform: translateY(-850px);
+    transform: translateY(-95%);
   }
 `;
