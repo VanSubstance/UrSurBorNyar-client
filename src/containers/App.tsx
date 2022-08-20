@@ -6,7 +6,7 @@ import { Header } from "../commons/Header";
 import ModalContent from "../components/ModalContent";
 import Pages from "../pages";
 
-function App() {
+function App() {  
   return (
     <RecoilRoot>
       <BrowserRouter>
