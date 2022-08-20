@@ -1,14 +1,10 @@
 import { atom } from 'recoil'
+import { CoordinateType } from '../types/map';
 
 type CoordinateListType = Array<{
-  title: string;
+  name: string;
   coor: CoordinateType;
 }>;
-
-export interface CoordinateType {
-  x: number;
-  y: number;
-}
 
 const CoordinateList = atom<CoordinateListType>({
   key: 'CoordinateList',

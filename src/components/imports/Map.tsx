@@ -2,7 +2,8 @@ import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import CoordinateList, { CoordinateType } from '../../recoils/coordinateList';
+import CoordinateList from '../../recoils/coordinateList';
+import { CoordinateType } from '../../types/map';
 
 export const KakaoMap = memo(({ width = `500px`, height = `400px` }: sizeProps) => {
   const [mapInstance, setMapInstance] = useState(null);
@@ -68,7 +69,7 @@ export const KakaoMap = memo(({ width = `500px`, height = `400px` }: sizeProps) 
     if (newCoor) {
       geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
         setCoordinateList(
-          [...coordinateList, { title: res[0].road_address ? res[0].road_address.address_name : '일반', coor: newCoor }].filter((c, index) => {
+          [...coordinateList, { name: res[0].road_address ? res[0].road_address.address_name : '일반', coor: newCoor }].filter((c, index) => {
             return coordinateList.length < 2 || index !== 0;
           })
         );

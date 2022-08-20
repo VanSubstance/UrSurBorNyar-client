@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import Buttons from "../components/buttons";
 import CoordinateList from "../recoils/coordinateList";
 
 export const Header = () => {
@@ -11,6 +12,6 @@ export const Header = () => {
   }, [coordinateList]);
 
   return (
-    null
+    <Buttons.Float text="데이터 한번 쏴보기" handleClick={null} isVisible={coordinateList.length == 2} />
   )
 }
