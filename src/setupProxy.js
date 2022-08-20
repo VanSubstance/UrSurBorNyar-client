@@ -1,12 +1,13 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = (app) => {
+  console.log(process.env);
   app.use(
-    '/api',
-    createProxyMiddleware('/api/naver', {
-      target: 'https://naveropenapi.apigw.ntruss.com',
+    '/innerApi',
+    createProxyMiddleware({
+      target: process.env.REACT_APP_SERVER_URL,
       pathRewrite: {
-        '^/api/naver': '',
+        '^/innerApi': '',
       },
       changeOrigin: true,
     }),

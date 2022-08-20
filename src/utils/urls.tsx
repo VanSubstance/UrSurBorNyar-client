@@ -4,4 +4,10 @@ const OuterApiUrl = {
   }
 }
 
-export { OuterApiUrl };
+const InnerApiBaseUrl = `/innerApi`;
+
+const InnerApiUrl = {
+  getPath: `${InnerApiBaseUrl}/basic/twocoors`
+}
+
+export { OuterApiUrl, InnerApiUrl };

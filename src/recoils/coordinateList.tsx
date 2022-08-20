@@ -1,12 +1,7 @@
 import { atom } from 'recoil'
-import { CoordinateType } from '../types/map';
+import { PlaceType } from '../types/map';
 
-type CoordinateListType = Array<{
-  name: string;
-  coor: CoordinateType;
-}>;
-
-const CoordinateList = atom<CoordinateListType>({
+const CoordinateList = atom<PlaceType[]>({
   key: 'CoordinateList',
   default: [],
 });
