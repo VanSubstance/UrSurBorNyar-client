@@ -13,7 +13,7 @@ const BottomDrawer = (props) => {
         <OpenBtnBot />
       </OpenBtn>
       <DrawerContentWrapper>
-        <DrawerContent/>
+        <DrawerContent />
       </DrawerContentWrapper>
     </DrawerWrapper>
   );
@@ -33,7 +33,7 @@ const DrawerContentWrapper = styled.div`
   margin: 0 auto;
   z-index: 998;
   width: 90%;
-  height: 100%;
+  height: 40%;
   background: #ffffff;
   border: 1px solid #9381dd;
   border-radius: 30px;
@@ -45,7 +45,7 @@ const DrawerContentWrapper = styled.div`
 const OpenBtn = styled.label`
   position: fixed;
   width: 40px;
-  height: 100%;
+  height: calc(40% + 40px);
   right: 7%;
   position: fixed;
   cursor: pointer;
