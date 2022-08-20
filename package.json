@@ -24,7 +24,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "env-cmd -f envs/.env.ysh react-scripts start",
+    "start-ysh": "env-cmd -f envs/.env.ysh react-scripts start",
+    "start-kmj": "env-cmd -f envs/.env.kmj react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
