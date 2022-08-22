@@ -93,3 +93,22 @@ const Checkbox = styled.input`
     transform: translateY(-95%);
   }
 `;
+
+const DrawerButton = styled.button`
+  height: 32px;
+  margin: 20px 20px;
+  padding: 0px 10px;
+  font-size: 14px;
+  background: #f6f8ff;
+  border: 1px solid #9381dd;
+  border-radius: 100px;
+  transition: 0.2s;
+
+  &:active,
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background: #494949;
+    color: white;
+  }
+`;
