@@ -1,10 +1,18 @@
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import CoordinateList from "../recoils/coordinateList";
+import ModalVisibility from "../recoils/modalvisibility";
 import { PlaceType } from "../types/map";
 
 const DrawerContent = (props) => {
   const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
+  const [modalState, setModalState] = useRecoilState(ModalVisibility);
+  const SearchAddressButton = () => {
+    setModalState({
+      type: "Address",
+      children: null,
+    });
+  };
 
   return (
     <DrawerContentWrapper>
@@ -13,7 +21,7 @@ const DrawerContent = (props) => {
           return <PlaceContent key={index} data={data} index={+index + 1} />;
         })}
       </div>
-      <DrawerAddressButton>주소로 찾기</DrawerAddressButton>
+      <DrawerAddressButton onClick={SearchAddressButton}>주소로 찾기</DrawerAddressButton>
     </DrawerContentWrapper>
   );
 };
@@ -23,7 +31,9 @@ const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
 
   const RemoveButton = () => {
     setCoordinateList(
-      coordinateList.filter((coordinateList) => coordinateList.coor !== data.coor)
+      coordinateList.filter(
+        (coordinateList) => coordinateList.coor !== data.coor
+      )
     );
   };
   const {

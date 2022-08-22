@@ -1,87 +1,122 @@
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
-import CoordinateList from '../../recoils/coordinateList';
-import { CoordinateType } from '../../types/map';
+import React, { memo, useCallback, useMemo, useRef, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import CoordinateList from "../../recoils/coordinateList";
+import { CoordinateType } from "../../types/map";
+import AddressRecoil from "../../recoils/adressRecoil";
 
-export const KakaoMap = memo(({ width = `500px`, height = `400px` }: sizeProps) => {
-  const [mapInstance, setMapInstance] = useState(null);
-  const [geoInstance, setGeoInstance] = useState(null);
-  const [centerCoor, setCenterCoor] = useState<CoordinateType>({
-    x: 37.5666805,
-    y: 126.9784147
-  });
-  const [newCoor, setNewCoor] = useState<CoordinateType>(null);
-  const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
-
-  const getKakaoCoors = useCallback(({ x, y }: CoordinateType) => {
-    return new window.kakao.maps.LatLng(x, y)
-  }, [window.kakao]);
-
-  useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
-        setCenterCoor({
-          x: latitude,
-          y: longitude,
-        });
-      });
-    }
-  }, [navigator]);
-
-  useEffect(() => {
-    const container = document.getElementById('map');
-    const map = new window.kakao.maps.Map(container, {
-      center: getKakaoCoors(centerCoor),
-      level: 3,
+export const KakaoMap = memo(
+  ({ width = `500px`, height = `400px` }: sizeProps) => {
+    const [mapInstance, setMapInstance] = useState(null);
+    const [geoInstance, setGeoInstance] = useState(null);
+    const [centerCoor, setCenterCoor] = useState<CoordinateType>({
+      x: 37.5666805,
+      y: 126.9784147,
     });
-    const geo = new window.kakao.maps.services.Geocoder();
-    setMapInstance(map);
-    setGeoInstance(geo);
-  }, []);
+    const [newCoor, setNewCoor] = useState<CoordinateType>(null);
+    const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
+    const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
 
-  useEffect(() => {
-    if (mapInstance) {
-      mapInstance.setCenter(getKakaoCoors(centerCoor));
-    }
-  }, [centerCoor]);
+    const getKakaoCoors = useCallback(
+      ({ x, y }: CoordinateType) => {
+        return new window.kakao.maps.LatLng(x, y);
+      },
+      [window.kakao]
+    );
 
-  useEffect(() => {
-    if (mapInstance) {
-      setClickEvent();
-    }
-  }, [mapInstance]);
+    useEffect(() => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          ({ coords: { latitude, longitude } }) => {
+            setCenterCoor({
+              x: latitude,
+              y: longitude,
+            });
+          }
+        );
+      }
+    }, [navigator]);
 
-  const setClickEvent = () => {
-    window.kakao.maps.event.addListener(
-      mapInstance, 'click', (e) => {
+    useEffect(() => {
+      const container = document.getElementById("map");
+      const map = new window.kakao.maps.Map(container, {
+        center: getKakaoCoors(centerCoor),
+        level: 3,
+      });
+      const geo = new window.kakao.maps.services.Geocoder();
+      setMapInstance(map);
+      setGeoInstance(geo);
+    }, []);
+
+    useEffect(() => {
+      if (mapInstance) {
+        mapInstance.setCenter(getKakaoCoors(centerCoor));
+      }
+    }, [centerCoor]);
+
+    useEffect(() => {
+      if (mapInstance) {
+        setClickEvent();
+      }
+    }, [mapInstance]);
+
+    const setClickEvent = () => {
+      window.kakao.maps.event.addListener(mapInstance, "click", (e) => {
         setNewCoor({
           x: e.latLng.Ma,
-          y: e.latLng.La
+          y: e.latLng.La,
+        });
+      });
+    };
+
+    useEffect(() => {
+      if (addressRecoil) {
+        geoInstance.addressSearch(addressRecoil, function (result, status) {
+          console.log(result);
+          setCoordinateList(
+            [
+              ...coordinateList,
+              {
+                name: addressRecoil,
+                coor: { x: result[0].x, y: result[0].y },
+                id: null,
+              },
+            ].filter((c, index) => {
+              // return coordinateList.length < 2 || index !== 0;
+              return true;
+            })
+          );
         });
       }
-    );
-  };
+    }, [addressRecoil]);
 
-  useEffect(() => {
-    if (newCoor) {
-      geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
-        setCoordinateList(
-          [...coordinateList, { name: res[0].road_address ? res[0].road_address.address_name : '일반', coor: newCoor, id: null }].filter((c, index) => {
-            // return coordinateList.length < 2 || index !== 0;
-            return true;
-          })
-        );
-      });
-      setNewCoor(null);
-    }
-  }, [newCoor]);
+    useEffect(() => {
+      if (newCoor) {
+        geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
+          setCoordinateList(
+            [
+              ...coordinateList,
+              {
+                name: res[0].road_address
+                  ? res[0].road_address.address_name
+                  : "일반",
+                coor: newCoor,
+                id: null,
+              },
+            ].filter((c, index) => {
+              // return coordinateList.length < 2 || index !== 0;
+              return true;
+            })
+          );
+        });
+        setNewCoor(null);
+      }
+    }, [newCoor]);
 
-  return (
-    <MapWrapper id={`map`} width={width} height={height}></MapWrapper>
-  );
-});
+    return <MapWrapper id={`map`} width={width} height={height}></MapWrapper>;
+  }
+);
 
 interface sizeProps {
   width?: string;
@@ -89,7 +124,7 @@ interface sizeProps {
 }
 
 const MapWrapper = styled.div<sizeProps>`
-${({ width, height }) => {
+  ${({ width, height }) => {
     return `
       width: ${width};
       height: ${height};

@@ -6,5 +6,9 @@ export interface CoordinateType {
 export type PlaceType = {
   id?: string;
   name: string;
-  coor: CoordinateType
-}
+  coor: CoordinateType;
+};
+
+export type addressType = {
+  address: string;
+};
