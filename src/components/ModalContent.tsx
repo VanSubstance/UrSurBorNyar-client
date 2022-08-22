@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import ModalVisibility from "../recoils/modalvisibility";
 import ModalCloseButton from "./buttons/ModalCloseButton";
+import SearchAddressContent from "./SearchAddressContent";
 
 const Modal = () => {
   const [modalState, setModalState] = useRecoilState(ModalVisibility);
@@ -47,7 +48,10 @@ const Modal = () => {
         <div>
           <ModalOverlay />
           <ModalWrapper onClick={closeModal}>
-            <ModalInner className="modal-inner" onClick={(e) => e.stopPropagation()}>
+            <ModalInner
+              className="modal-inner"
+              onClick={(e) => e.stopPropagation()}
+            >
               <ModalP>{modalState.children ?? <p>children없음</p>}</ModalP>
               <ModalLinkWrapper>
                 <ModalLinkP>{promiseLink}</ModalLinkP>{" "}
@@ -69,7 +73,10 @@ const Modal = () => {
         <div>
           <ModalOverlay />
           <ModalWrapper onClick={closeModal}>
-            <ModalInner className="modal-inner" onClick={(e) => e.stopPropagation()}>
+            <ModalInner
+              className="modal-inner"
+              onClick={(e) => e.stopPropagation()}
+            >
               <ModalP>{modalState.children ?? <p>children없음</p>}</ModalP>
               <ModalPasswordInput
                 name="modalPeopleNumber"
@@ -88,6 +95,15 @@ const Modal = () => {
                 </ModalButtonWidth>
               </ModalButtonWrapper>
             </ModalInner>
+          </ModalWrapper>
+        </div>
+      );
+    case "Address":
+      return (
+        <div>
+          <ModalOverlay />
+          <ModalWrapper onClick={closeModal}>
+              <SearchAddressContent />
           </ModalWrapper>
         </div>
       );
@@ -249,7 +265,7 @@ const ModalLinkP = styled.div`
 const ModalLinkbutton = styled.div`
   width: 60px;
   font-size: 14px;
-  padding : 18px 0px;
+  padding: 18px 0px;
   background: #f6f8ff;
   border: none;
   text-align: center;
