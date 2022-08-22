@@ -17,7 +17,7 @@ const patch = async (url: string, body: any, option: any) => {
   try {
     const res = await axios.patch(url, {
       ...option,
-      body
+      ...body,
     });
     return res.data;
   } catch (e) {
@@ -30,7 +30,7 @@ const post = async (url: string, body: any, option: any) => {
   try {
     const res = await axios.post(url, {
       ...option,
-      body,
+      ...body,
     });
     return res.data;
   } catch (e) {
