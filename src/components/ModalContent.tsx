@@ -98,12 +98,40 @@ const Modal = () => {
           </ModalWrapper>
         </div>
       );
-    case "Address":
+    case "address":
+      return (
+        <div>
+          <ModalOverlay />
+          <ModalWrapper
+            onClick={(e) => {
+              e.stopPropagation();
+              closeModal();
+            }}
+          >
+            <SearchAddressContent />
+          </ModalWrapper>
+        </div>
+      );
+    case "alert":
       return (
         <div>
           <ModalOverlay />
           <ModalWrapper onClick={closeModal}>
-              <SearchAddressContent />
+            <ModalInner
+              className="modal-inner"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ModalP>{modalState.children ?? <p>children없음</p>}</ModalP>
+              <ModalButtonWrapper>
+                <ModalButtonWidth
+                  onClick={(e) => {
+                    closeModal();
+                  }}
+                >
+                  확인
+                </ModalButtonWidth>
+              </ModalButtonWrapper>
+            </ModalInner>
           </ModalWrapper>
         </div>
       );

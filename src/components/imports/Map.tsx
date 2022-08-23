@@ -5,6 +5,7 @@ import styled from "styled-components";
 import CoordinateList from "../../recoils/coordinateList";
 import { CoordinateType } from "../../types/map";
 import AddressRecoil from "../../recoils/adressRecoil";
+import ModalVisibility from "../../recoils/modalvisibility";
 
 export const KakaoMap = memo(
   ({ width = `500px`, height = `400px` }: sizeProps) => {
@@ -17,6 +18,7 @@ export const KakaoMap = memo(
     const [newCoor, setNewCoor] = useState<CoordinateType>(null);
     const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
     const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
+    const [modalState, setModalState] = useRecoilState(ModalVisibility);
 
     const getKakaoCoors = useCallback(
       ({ x, y }: CoordinateType) => {
@@ -70,6 +72,13 @@ export const KakaoMap = memo(
       });
     };
 
+    const alertModalOpen = () => {
+      setModalState({
+        type: "alert",
+        children: "같은 장소가 이미 있습니다",
+      });
+    };
+
     useEffect(() => {
       if (addressRecoil) {
         geoInstance.addressSearch(addressRecoil, function (result, status) {
@@ -94,21 +103,31 @@ export const KakaoMap = memo(
     useEffect(() => {
       if (newCoor) {
         geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
-          setCoordinateList(
-            [
-              ...coordinateList,
-              {
-                name: res[0].road_address
-                  ? res[0].road_address.address_name
-                  : "일반",
-                coor: newCoor,
-                id: null,
-              },
-            ].filter((c, index) => {
-              // return coordinateList.length < 2 || index !== 0;
-              return true;
-            })
-          );
+          if (
+            coordinateList.some(
+              (coordinateList) =>
+                coordinateList.name === res[0].road_address ||
+                coordinateList.name === res[0].road_address.address_name ||
+                coordinateList.coor === newCoor
+            )
+          ) {
+            alertModalOpen();
+          } else
+            setCoordinateList(
+              [
+                ...coordinateList,
+                {
+                  name: res[0].road_address
+                    ? res[0].road_address.address_name
+                    : "일반",
+                  coor: newCoor,
+                  id: null,
+                },
+              ].filter((c, index) => {
+                // return coordinateList.length < 2 || index !== 0;
+                return true;
+              })
+            );
         });
         setNewCoor(null);
       }

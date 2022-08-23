@@ -9,7 +9,7 @@ const DrawerContent = (props) => {
   const [modalState, setModalState] = useRecoilState(ModalVisibility);
   const SearchAddressButton = () => {
     setModalState({
-      type: "Address",
+      type: "address",
       children: null,
     });
   };

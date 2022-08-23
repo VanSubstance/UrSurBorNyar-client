@@ -6,7 +6,7 @@ interface ModalProps {
     children: ReactNode;
 }
 
-type ModalType = "link" | "start" | "Address" |"none";
+type ModalType = "link" | "start" | "address" | "alert" | "none";
 
 const ModalVisibility = atom<ModalProps>({
     key: 'ModalVisibility',
