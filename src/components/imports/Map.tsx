@@ -79,6 +79,33 @@ export const KakaoMap = memo(
       });
     };
 
+    const placeMark = () => {
+      new window.kakao.maps.marker({
+        position: {},
+      });
+    };
+
+    const placeOverlapChecker = (res) => {
+      if (
+        (res[0].road_address !== null &&
+          coordinateList.some(
+            (coordinateList) =>
+              coordinateList.name === res[0].road_address.address_name
+          )) ||
+        (res[0].road_address === null &&
+          coordinateList.some(
+            (coordinateList) => coordinateList.coor.x === newCoor.x
+          ) &&
+          coordinateList.some(
+            (coordinateList) => coordinateList.coor.y === newCoor.y
+          ))
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     useEffect(() => {
       if (addressRecoil) {
         geoInstance.addressSearch(addressRecoil, function (result, status) {
@@ -103,23 +130,16 @@ export const KakaoMap = memo(
     useEffect(() => {
       if (newCoor) {
         geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
-          if (
-            coordinateList.some(
-              (coordinateList) =>
-                coordinateList.name === res[0].road_address ||
-                coordinateList.name === res[0].road_address.address_name ||
-                coordinateList.coor === newCoor
-            )
-          ) {
+          if (placeOverlapChecker(res)) {
             alertModalOpen();
-          } else
+          } else {
             setCoordinateList(
               [
                 ...coordinateList,
                 {
                   name: res[0].road_address
                     ? res[0].road_address.address_name
-                    : "일반",
+                    : "주소 없음",
                   coor: newCoor,
                   id: null,
                 },
@@ -128,6 +148,8 @@ export const KakaoMap = memo(
                 return true;
               })
             );
+            placeMark();
+          }
         });
         setNewCoor(null);
       }
