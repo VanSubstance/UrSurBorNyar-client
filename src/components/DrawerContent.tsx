@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import CoordinateList from "../recoils/coordinateList";
+import MarkerList from "../recoils/markerList";
 import ModalVisibility from "../recoils/modalvisibility";
 import { PlaceType } from "../types/map";
 
@@ -21,13 +22,22 @@ const DrawerContent = (props) => {
           return <PlaceContent key={index} data={data} index={+index + 1} />;
         })}
       </div>
-      <DrawerAddressButton onClick={SearchAddressButton}>주소로 찾기</DrawerAddressButton>
+      <DrawerAddressButton onClick={SearchAddressButton}>
+        주소로 찾기
+      </DrawerAddressButton>
     </DrawerContentWrapper>
   );
 };
 
 const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
   const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
+  const [markerList, setMarkerList] = useRecoilState(MarkerList);
+
+  //const setMarkers = (map) => {
+  //  for (var i = 0; i < markerList.length; i++) {
+  //    markerList[i].marker.setMap(map);
+  //  }
+  //};
 
   const RemoveButton = () => {
     setCoordinateList(
@@ -35,7 +45,12 @@ const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
         (coordinateList) => coordinateList.coor !== data.coor
       )
     );
+    //setMarkerList(
+    //  markerList.filter((markerList) => markerList.coor !== data.coor)
+    //);
+    //setMarkers(null);
   };
+
   const {
     name,
     coor: { x, y },
