@@ -12,3 +12,8 @@ export type PlaceType = {
 export type addressType = {
   address: string;
 };
+
+export type MarkerType = {
+  coor: CoordinateType;
+  marker: any;
+};

@@ -6,6 +6,7 @@ import CoordinateList from "../../recoils/coordinateList";
 import { CoordinateType } from "../../types/map";
 import AddressRecoil from "../../recoils/adressRecoil";
 import ModalVisibility from "../../recoils/modalvisibility";
+import MarkerList from "../../recoils/markerList";
 
 export const KakaoMap = memo(
   ({ width = `500px`, height = `400px` }: sizeProps) => {
@@ -19,6 +20,7 @@ export const KakaoMap = memo(
     const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
     const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
     const [modalState, setModalState] = useRecoilState(ModalVisibility);
+    const [markerList, setMarkerList] = useRecoilState(MarkerList);
 
     const getKakaoCoors = useCallback(
       ({ x, y }: CoordinateType) => {
@@ -72,17 +74,43 @@ export const KakaoMap = memo(
       });
     };
 
-    const alertModalOpen = () => {
+    const alertModalSamePlace = () => {
       setModalState({
         type: "alert",
-        children: "같은 장소가 이미 있습니다",
+        children: "같은 장소가 이미 있습니다.",
       });
     };
 
-    const placeMark = () => {
-      new window.kakao.maps.marker({
-        position: {},
+    const alertModalNoAdress = () => {
+      setModalState({
+        type: "alert",
+        children: "주소가 존재하지 않는 장소입니다.",
       });
+    };
+
+    const placeMarkCoor = () => {
+      const marker = new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(newCoor.x, newCoor.y),
+      });
+      marker.setMap(mapInstance);
+      setMarkerList((markerList) => [...markerList, marker]);
+    };
+
+    const placeMarkAddress = (result) => {
+      const markerPosition = new window.kakao.maps.LatLng(
+        result[0].x,
+        result[0].y
+      );
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+      });
+      marker.setMap(mapInstance);
+    };
+
+    const setMarkers = (map) => {
+      for (var i = 0; i < markerList.length; i++) {
+        markerList[i].marker.setMap(map);
+      }
     };
 
     const placeOverlapChecker = (res) => {
@@ -106,10 +134,17 @@ export const KakaoMap = memo(
       }
     };
 
+    const placeNoAdressChecker = (res) => {
+      if (res[0].road_address === null) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     useEffect(() => {
       if (addressRecoil) {
         geoInstance.addressSearch(addressRecoil, function (result, status) {
-          console.log(result);
           setCoordinateList(
             [
               ...coordinateList,
@@ -123,6 +158,7 @@ export const KakaoMap = memo(
               return true;
             })
           );
+          placeMarkAddress(result);
         });
       }
     }, [addressRecoil]);
@@ -131,7 +167,9 @@ export const KakaoMap = memo(
       if (newCoor) {
         geoInstance.coord2Address(newCoor.y, newCoor.x, (res, status) => {
           if (placeOverlapChecker(res)) {
-            alertModalOpen();
+            alertModalSamePlace();
+          } else if (placeNoAdressChecker(res)) {
+            alertModalNoAdress();
           } else {
             setCoordinateList(
               [
@@ -148,7 +186,7 @@ export const KakaoMap = memo(
                 return true;
               })
             );
-            placeMark();
+            placeMarkCoor();
           }
         });
         setNewCoor(null);
