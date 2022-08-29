@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import CoordinateList from "../recoils/coordinateList";
-import MarkerList from "../recoils/markerList";
+import MarkerDeleteState from "../recoils/MarkerDeleteState";
 import ModalVisibility from "../recoils/modalvisibility";
 import { PlaceType } from "../types/map";
 
@@ -31,13 +31,7 @@ const DrawerContent = (props) => {
 
 const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
   const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
-  const [markerList, setMarkerList] = useRecoilState(MarkerList);
-
-  //const setMarkers = (map) => {
-  //  for (var i = 0; i < markerList.length; i++) {
-  //    markerList[i].marker.setMap(map);
-  //  }
-  //};
+  const [markerDeleteState, setMarkerDeleteState] = useRecoilState(MarkerDeleteState);
 
   const RemoveButton = () => {
     setCoordinateList(
@@ -45,10 +39,7 @@ const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
         (coordinateList) => coordinateList.coor !== data.coor
       )
     );
-    //setMarkerList(
-    //  markerList.filter((markerList) => markerList.coor !== data.coor)
-    //);
-    //setMarkers(null);
+    setMarkerDeleteState(data.coor);
   };
 
   const {

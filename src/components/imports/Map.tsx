@@ -6,7 +6,7 @@ import CoordinateList from "../../recoils/coordinateList";
 import { CoordinateType } from "../../types/map";
 import AddressRecoil from "../../recoils/adressRecoil";
 import ModalVisibility from "../../recoils/modalvisibility";
-import MarkerList from "../../recoils/markerList";
+import MarkerDeleteState from "../../recoils/MarkerDeleteState";
 
 export const KakaoMap = memo(
   ({ width = `500px`, height = `400px` }: sizeProps) => {
@@ -16,11 +16,13 @@ export const KakaoMap = memo(
       x: 37.5666805,
       y: 126.9784147,
     });
+    const [markerState, setMarkerState] = useState([]);
     const [newCoor, setNewCoor] = useState<CoordinateType>(null);
     const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
     const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
     const [modalState, setModalState] = useRecoilState(ModalVisibility);
-    const [markerList, setMarkerList] = useRecoilState(MarkerList);
+    const [markerDeleteState, setMarkerDeleteState] =
+      useRecoilState(MarkerDeleteState);
 
     const getKakaoCoors = useCallback(
       ({ x, y }: CoordinateType) => {
@@ -92,8 +94,13 @@ export const KakaoMap = memo(
       const marker = new window.kakao.maps.Marker({
         position: new window.kakao.maps.LatLng(newCoor.x, newCoor.y),
       });
-      marker.setMap(mapInstance);
-      setMarkerList((markerList) => [...markerList, marker]);
+      setMarkerState((markerState) => [
+        ...markerState,
+        {
+          coor: newCoor,
+          marker: marker,
+        },
+      ]);
     };
 
     const placeMarkAddress = (result) => {
@@ -108,8 +115,8 @@ export const KakaoMap = memo(
     };
 
     const setMarkers = (map) => {
-      for (var i = 0; i < markerList.length; i++) {
-        markerList[i].marker.setMap(map);
+      for (var i = 0; i < markerState.length; i++) {
+        markerState[i].marker.setMap(map);
       }
     };
 
@@ -141,6 +148,20 @@ export const KakaoMap = memo(
         return false;
       }
     };
+
+    useEffect(() => {
+      setMarkers(null);
+      setMarkerState(
+        markerState.filter(
+          (markerState) => markerState.coor !== markerDeleteState
+        )
+      );
+    }, [markerDeleteState]);
+
+    useEffect(() => {
+      setMarkers(null);
+      setMarkers(mapInstance);
+    }, [markerState])
 
     useEffect(() => {
       if (addressRecoil) {
