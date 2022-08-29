@@ -17,3 +17,7 @@ export type MarkerType = {
   coor: CoordinateType;
   marker: any;
 };
+
+export type DeleteMarkerType = {
+  coor: CoordinateType;
+}
