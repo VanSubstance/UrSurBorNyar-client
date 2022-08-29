@@ -104,14 +104,16 @@ export const KakaoMap = memo(
     };
 
     const placeMarkAddress = (result) => {
-      const markerPosition = new window.kakao.maps.LatLng(
-        result[0].x,
-        result[0].y
-      );
       const marker = new window.kakao.maps.Marker({
-        position: markerPosition,
+        position: new window.kakao.maps.LatLng(result[0].y, result[0].x),
       });
-      marker.setMap(mapInstance);
+      setMarkerState((markerState) => [
+        ...markerState,
+        {
+          coor: { x: result[0].y, y: result[0].x },
+          marker: marker,
+        },
+      ]);
     };
 
     const setMarkers = (map) => {
@@ -161,25 +163,29 @@ export const KakaoMap = memo(
     useEffect(() => {
       setMarkers(null);
       setMarkers(mapInstance);
-    }, [markerState])
+    }, [markerState]);
 
     useEffect(() => {
       if (addressRecoil) {
         geoInstance.addressSearch(addressRecoil, function (result, status) {
-          setCoordinateList(
-            [
-              ...coordinateList,
-              {
-                name: addressRecoil,
-                coor: { x: result[0].x, y: result[0].y },
-                id: null,
-              },
-            ].filter((c, index) => {
-              // return coordinateList.length < 2 || index !== 0;
-              return true;
-            })
-          );
-          placeMarkAddress(result);
+          setNewCoor({
+            x: result[0].y,
+            y: result[0].x,
+          });
+          //setCoordinateList(
+          //  [
+          //    ...coordinateList,
+          //    {
+          //      name: addressRecoil,
+          //      coor: { x: result[0].y, y: result[0].x },
+          //      id: null,
+          //    },
+          //  ].filter((c, index) => {
+          //    // return coordinateList.length < 2 || index !== 0;
+          //    return true;
+          //  })
+          //);
+          //placeMarkAddress(result);
         });
       }
     }, [addressRecoil]);
