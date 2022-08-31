@@ -22,9 +22,9 @@ const DrawerContent = (props) => {
           return <PlaceContent key={index} data={data} index={+index + 1} />;
         })}
       </div>
-      <DrawerAddressButton onClick={SearchAddressButton}>
+      <DrawerAddressButtonWrapper onClick={SearchAddressButton}>
         주소로 찾기
-      </DrawerAddressButton>
+      </DrawerAddressButtonWrapper>
     </DrawerContentWrapper>
   );
 };
@@ -49,11 +49,11 @@ const PlaceContent = ({ index, data }: { index: number; data: PlaceType }) => {
   } = data;
   return (
     <StartWrapper>
-      <StartTitle>{`${index}번째 장소`}</StartTitle>
-      <StartContent>{`${x}, ${y}`}</StartContent>
-      <StartAddress>{name}</StartAddress>
+      <StartTitleWrapper>{`${index}번째 장소`}</StartTitleWrapper>
+      <StartContentWrapper>{`${x}, ${y}`}</StartContentWrapper>
+      <StartAddressWrapper>{name}</StartAddressWrapper>
       <StaerButtonWrapper>
-        <DrawerButton onClick={RemoveButton}>삭제</DrawerButton>
+        <DrawerButtonWrapper onClick={RemoveButton}>삭제</DrawerButtonWrapper>
       </StaerButtonWrapper>
     </StartWrapper>
   );
@@ -69,15 +69,15 @@ const DrawerContentWrapper = styled.div`
 
 const StartWrapper = styled.div``;
 
-const StartTitle = styled.p`
+const StartTitleWrapper = styled.p`
   font-size: 18px;
 `;
 
-const StartContent = styled.p`
+const StartContentWrapper = styled.p`
   font-size: 16px;
 `;
 
-const StartAddress = styled.p`
+const StartAddressWrapper = styled.p`
   font-size: 16px;
 `;
 
@@ -87,7 +87,7 @@ const StaerButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const DrawerButton = styled.button`
+const DrawerButtonWrapper = styled.button`
   height: 32px;
   padding: 0px 10px;
   font-size: 14px;
@@ -105,7 +105,7 @@ const DrawerButton = styled.button`
   }
 `;
 
-const DrawerAddressButton = styled.button`
+const DrawerAddressButtonWrapper = styled.button`
   height: 32px;
   margin: 20px 0px 0px 0px;
   padding: 0px 10px;

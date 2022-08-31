@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { Footer } from "../commons/Footer";
 import { Header } from "../commons/Header";
-import BottomDrawer from "../components/BottomDrawer";
+import BottomDrawerContainer from "../components/BottomDrawerContainer";
 import ModalContent from "../components/ModalContent";
 import Pages from "../pages";
 
@@ -19,7 +19,7 @@ function App() {
           <Route path='*' element={<Pages.NotFound />} />
         </Routes>
         {/* <Footer /> */}
-        <BottomDrawer />
+        <BottomDrawerContainer />
       </BrowserRouter>
     </RecoilRoot>
   );

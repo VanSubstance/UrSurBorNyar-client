@@ -3,15 +3,15 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import DrawerContent from "./DrawerContent";
 
-const BottomDrawer = (props) => {
+const BottomDrawerContainer = (props) => {
   return (
     <DrawerWrapper>
-      <Checkbox type="checkbox" id="navInput" />
-      <OpenBtn htmlFor="navInput">
-        <OpenBtnTop />
-        <OpenBtnMid />
-        <OpenBtnBot />
-      </OpenBtn>
+      <CheckboxWrapper type="checkbox" id="navInput" />
+      <OpenBtnWrapper htmlFor="navInput">
+        <OpenBtnTopWrapper />
+        <OpenBtnMidWrapper />
+        <OpenBtnBotWrapper />
+      </OpenBtnWrapper>
       <DrawerContentWrapper>
         <DrawerContent />
       </DrawerContentWrapper>
@@ -19,7 +19,7 @@ const BottomDrawer = (props) => {
   );
 };
 
-export default BottomDrawer;
+export default BottomDrawerContainer;
 
 const DrawerWrapper = styled.div`
   position: fixed;
@@ -42,7 +42,7 @@ const DrawerContentWrapper = styled.div`
   transition: 0.5s cubic-bezier(0.6, 0.05, 0.28, 0.91);
 `;
 
-const OpenBtn = styled.label`
+const OpenBtnWrapper = styled.label`
   position: fixed;
   width: 40px;
   height: calc(40% + 40px);
@@ -54,13 +54,13 @@ const OpenBtn = styled.label`
   z-index: 997;
 `;
 
-const OpenBtnTop = styled.div`
+const OpenBtnTopWrapper = styled.div`
   width: 40px;
   height: 8px;
   border-radius: 5px;
   background: #000;
 `;
-const OpenBtnMid = styled.div`
+const OpenBtnMidWrapper = styled.div`
   width: 40px;
   height: 8px;
   border-radius: 5px;
@@ -68,14 +68,14 @@ const OpenBtnMid = styled.div`
   margin: 6px 0;
 `;
 
-const OpenBtnBot = styled.div`
+const OpenBtnBotWrapper = styled.div`
   width: 40px;
   height: 8px;
   border-radius: 5px;
   background: #000;
 `;
 
-const Checkbox = styled.input`
+const CheckboxWrapper = styled.input`
   display: none;
   position: fixed;
   margin: 0px 0px 0px 0px;
@@ -89,7 +89,7 @@ const Checkbox = styled.input`
   &:checked ~ ${DrawerContentWrapper} {
     transform: translateX(-50%) translateY(-90%);
   }
-  &:checked ~ ${OpenBtn} {
+  &:checked ~ ${OpenBtnWrapper} {
     transform: translateY(-95%);
   }
 `;
