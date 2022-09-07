@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const MainButtonWrapper = styled.button`
-width: 100px;
 height: 40px;
 background-color: #ffffffff;
 color: #252525;

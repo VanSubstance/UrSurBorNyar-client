@@ -7,6 +7,7 @@ import { CoordinateType } from "../../types/map";
 import AddressRecoil from "../../recoils/adressRecoil";
 import ModalVisibility from "../../recoils/modalvisibility";
 import MarkerDeleteState from "../../recoils/MarkerDeleteState";
+import RouteRecoil from "../../recoils/routeRecoil";
 
 export const KakaoMap = memo(
   ({ width = `500px`, height = `400px` }: sizeProps) => {
@@ -16,13 +17,15 @@ export const KakaoMap = memo(
       x: 37.5666805,
       y: 126.9784147,
     });
-    const [markerState, setMarkerState] = useState([]);
+    const [markerListState, setMarkerListState] = useState([]);
+    const [jsonPlaceCoor, setJsonPlaceCoor] = useState<CoordinateType>();
     const [newCoor, setNewCoor] = useState<CoordinateType>(null);
     const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
     const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
     const [modalState, setModalState] = useRecoilState(ModalVisibility);
     const [markerDeleteState, setMarkerDeleteState] =
       useRecoilState(MarkerDeleteState);
+    const [routeState, setRouteState] = useRecoilState(RouteRecoil);
 
     const getKakaoCoors = useCallback(
       ({ x, y }: CoordinateType) => {
@@ -94,7 +97,7 @@ export const KakaoMap = memo(
       const marker = new window.kakao.maps.Marker({
         position: new window.kakao.maps.LatLng(newCoor.x, newCoor.y),
       });
-      setMarkerState((markerState) => [
+      setMarkerListState((markerState) => [
         ...markerState,
         {
           coor: newCoor,
@@ -103,22 +106,9 @@ export const KakaoMap = memo(
       ]);
     };
 
-    const placeMarkAddress = (result) => {
-      const marker = new window.kakao.maps.Marker({
-        position: new window.kakao.maps.LatLng(result[0].y, result[0].x),
-      });
-      setMarkerState((markerState) => [
-        ...markerState,
-        {
-          coor: { x: result[0].y, y: result[0].x },
-          marker: marker,
-        },
-      ]);
-    };
-
     const setMarkers = (map) => {
-      for (var i = 0; i < markerState.length; i++) {
-        markerState[i].marker.setMap(map);
+      for (var i = 0; i < markerListState.length; i++) {
+        markerListState[i].marker.setMap(map);
       }
     };
 
@@ -153,8 +143,8 @@ export const KakaoMap = memo(
 
     useEffect(() => {
       setMarkers(null);
-      setMarkerState(
-        markerState.filter(
+      setMarkerListState(
+        markerListState.filter(
           (markerState) => markerState.coor !== markerDeleteState
         )
       );
@@ -163,7 +153,7 @@ export const KakaoMap = memo(
     useEffect(() => {
       setMarkers(null);
       setMarkers(mapInstance);
-    }, [markerState]);
+    }, [markerListState]);
 
     useEffect(() => {
       if (addressRecoil) {
@@ -172,23 +162,58 @@ export const KakaoMap = memo(
             x: result[0].y,
             y: result[0].x,
           });
-          //setCoordinateList(
-          //  [
-          //    ...coordinateList,
-          //    {
-          //      name: addressRecoil,
-          //      coor: { x: result[0].y, y: result[0].x },
-          //      id: null,
-          //    },
-          //  ].filter((c, index) => {
-          //    // return coordinateList.length < 2 || index !== 0;
-          //    return true;
-          //  })
-          //);
-          //placeMarkAddress(result);
         });
       }
     }, [addressRecoil]);
+
+    const getStartPlace = () => {
+      fetch("http://localhost:3001/startPlace")
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setJsonPlaceCoor({
+            x: data.coordinate.y,
+            y: data.coordinate.x,
+          });
+        });
+    };
+
+    const getRoutePlace = () => {
+      fetch("http://localhost:3001/route")
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          for (var i = 0; i < data.pathList.length; i++) {
+            setJsonPlaceCoor({
+              x: data.pathList[i].fy,
+              y: data.pathList[i].fx,
+            });
+          }
+        });
+    };
+
+    const getEndPlace = () => {
+      fetch("http://localhost:3001/endPlace")
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setJsonPlaceCoor({
+            x: data.coordinate.y,
+            y: data.coordinate.x,
+          });
+        });
+    };
+
+    useEffect(() => {
+      if (routeState) {
+        getStartPlace();
+        getRoutePlace();
+        getEndPlace();
+      }
+    }, [routeState]);
 
     useEffect(() => {
       if (newCoor) {
