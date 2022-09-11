@@ -18,8 +18,9 @@ export const KakaoMap = memo(
       y: 126.9784147,
     });
     const [markerListState, setMarkerListState] = useState([]);
-    const [jsonPlaceCoor, setJsonPlaceCoor] = useState<CoordinateType>();
+    const [routeList, setRouteList] = useState<CoordinateType[]>([]);
     const [newCoor, setNewCoor] = useState<CoordinateType>(null);
+    const [routeFinish, setRouteFinish] = useState<boolean>(false);
     const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
     const [addressRecoil, setAddressRecoil] = useRecoilState(AddressRecoil);
     const [modalState, setModalState] = useRecoilState(ModalVisibility);
@@ -172,10 +173,13 @@ export const KakaoMap = memo(
           return res.json();
         })
         .then((data) => {
-          setJsonPlaceCoor({
-            x: data.coordinate.y,
-            y: data.coordinate.x,
-          });
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.coordinate.y,
+              y: data.coordinate.x,
+            },
+          ]);
         });
     };
 
@@ -185,12 +189,50 @@ export const KakaoMap = memo(
           return res.json();
         })
         .then((data) => {
-          for (var i = 0; i < data.pathList.length; i++) {
-            setJsonPlaceCoor({
-              x: data.pathList[i].fy,
-              y: data.pathList[i].fx,
-            });
-          }
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.pathList[0].fy,
+              y: data.pathList[0].fx,
+            },
+          ]);
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.pathList[0].ty,
+              y: data.pathList[0].tx,
+            },
+          ]);
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.pathList[1].fy,
+              y: data.pathList[1].fx,
+            },
+          ]);
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.pathList[1].ty,
+              y: data.pathList[1].tx,
+            },
+          ]);
+          //for (var i = 0; i < data.pathList.length; i++) {
+          //  setRouteList((routeList) => [
+          //    ...routeList,
+          //    {
+          //      x: data.pathList[i].fy,
+          //      y: data.pathList[i].fx,
+          //    },
+          //  ]);
+          //  setRouteList((routeList) => [
+          //    ...routeList,
+          //    {
+          //      x: data.pathList[i].ty,
+          //      y: data.pathList[i].tx,
+          //    },
+          //  ]);
+          //}
         });
     };
 
@@ -200,20 +242,45 @@ export const KakaoMap = memo(
           return res.json();
         })
         .then((data) => {
-          setJsonPlaceCoor({
-            x: data.coordinate.y,
-            y: data.coordinate.x,
-          });
+          setRouteList((routeList) => [
+            ...routeList,
+            {
+              x: data.coordinate.y,
+              y: data.coordinate.x,
+            },
+          ]);
         });
+    };
+
+    const setRouteMarkers = (map) => {
+      for (var i = 0; i < routeList.length; i++) {
+        const markerPosition = new window.kakao.maps.LatLng(
+          routeList[i].x,
+          routeList[i].y
+        );
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(map);
+      }
+    };
+
+    const getRoute = () => {
+      getStartPlace();
+      getRoutePlace();
+      getEndPlace();
     };
 
     useEffect(() => {
       if (routeState) {
-        getStartPlace();
-        getRoutePlace();
-        getEndPlace();
+        getRoute();
       }
     }, [routeState]);
+
+    useEffect(() => {
+      console.log(routeList);
+      setRouteMarkers(mapInstance);
+    }, [routeList])
 
     useEffect(() => {
       if (newCoor) {

@@ -21,3 +21,7 @@ export type MarkerType = {
 export type DeleteMarkerType = {
   coor: CoordinateType;
 }
+
+export type RouteListType = {
+  coor: CoordinateType;
+};

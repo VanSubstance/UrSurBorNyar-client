@@ -1,5 +1,5 @@
 import DaumPostcode from "react-daum-postcode";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import ModalVisibility from "../recoils/modalvisibility";
 import CoordinateList from "../recoils/coordinateList";
@@ -10,10 +10,11 @@ const SearchAddressContent = (props) => {
   const [coordinateList, setCoordinateList] = useRecoilState(CoordinateList);
   const [addressState, setAddresssState] = useRecoilState(addressRecoil);
   const [modalState, setModalState] = useRecoilState(ModalVisibility);
-  const [newCoor, setNewCoor] = useState<CoordinateType>(null);
 
   const handleComplete = (data) => {
-    setAddresssState(data.address);
+    if (data) {
+      setAddresssState(data.address);
+    }
   };
 
   const handleClose = (data) => {
