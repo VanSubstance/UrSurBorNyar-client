@@ -180,7 +180,9 @@ export const KakaoMap = memo(
               y: data.coordinate.x,
             },
           ]);
-        });
+          getRoutePlace();
+        })
+        .catch((e) => {});
     };
 
     const getRoutePlace = () => {
@@ -189,50 +191,20 @@ export const KakaoMap = memo(
           return res.json();
         })
         .then((data) => {
-          setRouteList((routeList) => [
-            ...routeList,
-            {
-              x: data.pathList[0].fy,
-              y: data.pathList[0].fx,
-            },
-          ]);
-          setRouteList((routeList) => [
-            ...routeList,
-            {
-              x: data.pathList[0].ty,
-              y: data.pathList[0].tx,
-            },
-          ]);
-          setRouteList((routeList) => [
-            ...routeList,
-            {
-              x: data.pathList[1].fy,
-              y: data.pathList[1].fx,
-            },
-          ]);
-          setRouteList((routeList) => [
-            ...routeList,
-            {
-              x: data.pathList[1].ty,
-              y: data.pathList[1].tx,
-            },
-          ]);
-          //for (var i = 0; i < data.pathList.length; i++) {
-          //  setRouteList((routeList) => [
-          //    ...routeList,
-          //    {
-          //      x: data.pathList[i].fy,
-          //      y: data.pathList[i].fx,
-          //    },
-          //  ]);
-          //  setRouteList((routeList) => [
-          //    ...routeList,
-          //    {
-          //      x: data.pathList[i].ty,
-          //      y: data.pathList[i].tx,
-          //    },
-          //  ]);
-          //}
+          data.pathList.map((path, index) => {
+            setRouteList((routeList) => [
+              ...routeList,
+              {
+                x: path.fy,
+                y: path.fx,
+              },
+              {
+                x: path.ty,
+                y: path.tx,
+              },
+            ]);
+          });
+          getEndPlace();
         });
     };
 
@@ -254,21 +226,43 @@ export const KakaoMap = memo(
 
     const setRouteMarkers = (map) => {
       for (var i = 0; i < routeList.length; i++) {
+        const markerGreen = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+        const imageSize = new window.kakao.maps.Size(40, 40);
+        const markerImage = new window.kakao.maps.MarkerImage(
+          markerGreen,
+          imageSize,
+        );
         const markerPosition = new window.kakao.maps.LatLng(
           routeList[i].x,
           routeList[i].y
         );
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
+          image: markerImage,
         });
         marker.setMap(map);
       }
     };
 
+    const setRouteLines = (map) => {
+      for (var i = 0; i + 1 < routeList.length; i++) {
+        const linePath = [
+          new window.kakao.maps.LatLng(routeList[i].x, routeList[i].y),
+          new window.kakao.maps.LatLng(routeList[i + 1].x, routeList[i + 1].y),
+        ];
+        const routeLine = new window.kakao.maps.Polyline({
+          path: linePath,
+          strokeWeight: 5,
+          strokeColor: "#FFAE00",
+          strokeOpacity: 1,
+          strokeStyle: "solid",
+        });
+        routeLine.setMap(map);
+      }
+    };
+
     const getRoute = () => {
       getStartPlace();
-      getRoutePlace();
-      getEndPlace();
     };
 
     useEffect(() => {
@@ -278,9 +272,9 @@ export const KakaoMap = memo(
     }, [routeState]);
 
     useEffect(() => {
-      console.log(routeList);
       setRouteMarkers(mapInstance);
-    }, [routeList])
+      setRouteLines(mapInstance);
+    }, [routeList]);
 
     useEffect(() => {
       if (newCoor) {
